@@ -5,8 +5,8 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node script.js",
+    "dev": "nodemon script.js"
   },
   "dependencies": {
     "console.table": "^0.10.0",

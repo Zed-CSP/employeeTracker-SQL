@@ -1,21 +1,10 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql');
-const cTable = require('console.table');
 const db = require('./config/connections.js');
+const actions = require('./config/actions.js');
 const titleArt = require('./assets/ascii.js');
+ 
 
-// create the connection information for the sql database
-const connection = mysql.createConnection({
-    host: 'localhost',
-    port: 3306,
-
-    // Your username
-
-
-    // Your password
-    password: 'root',
-    database: 'employee_trackerDB',
-});
 
 // connect to the mysql server and sql database
 db.connect((err) => {
@@ -56,55 +45,55 @@ const init = () => {
         const { action } = answer
 
         if (action === 'List all Departments') {
-            listAllDepartments();
+            actions.listAllDepartments();
         }
 
         if (action === 'View Department Budgets') {
-            viewDepartmentBudgets();
+            actions.viewDepartmentBudgets();
         }
 
         if (action === 'List all Roles') {
-            listAllRoles();
+            actions.listAllRoles();
         }
 
         if (action === 'List all Employees') {
-            listAllEmployees();
+            actions.listAllEmployees();
         }
 
         if (action === 'Add a Department') {
-            addDepartment();
+            actions.addDepartment();
         }
 
         if (action === 'Add a Role') {
-            addRole();
+            actions.addRole();
         }
 
         if (action === 'Add an Employee') {
-            addEmployee();
+            actions.addEmployee();
         }
 
         if (action === 'Update an Employee Role') {
-            updateEmployeeRole();
+            actions.updateEmployeeRole();
         }
 
         if (action === 'Update an Employee Manager') {
-            updateEmployeeManager();
+            actions.updateEmployeeManager();
         }
 
         if (action === 'Delete a Department') {
-            deleteDepartment();
+            actions.deleteDepartment();
         }
 
         if (action === 'Delete a Role') {
-            deleteRole();
+            actions.deleteRole();
         }
 
         if (action === 'Delete an Employee') {
-            deleteEmployee();
+            actions.deleteEmployee();
         }
 
         if (action === 'Exit') {
-            exit();
+            actions.exit();
         }
     })
 };
