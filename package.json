@@ -1,7 +1,7 @@
 {
   "name": "employee-tracker",
   "version": "1.0.0",
-  "description": "This is a node application that allows the user to view and CRUD departments, roles, and employees in a company.",
+  "description": "This is a node application that allows the user to CRUD departments, roles, and employees in a company.",
   "main": "server.js",
   "license": "MIT",
   "scripts": {
