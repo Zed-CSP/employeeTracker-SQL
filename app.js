@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const db = require('./config/connections.js');
 const actions = require('./config/actions.js');
 const titleArt = require('./assets/ascii.js');

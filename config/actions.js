@@ -1,4 +1,4 @@
-const viewDepartmentBudgets = () => {
+const viewAllDepartments = () => {
     db.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -6,7 +6,7 @@ const viewDepartmentBudgets = () => {
     })
 }
 
-const listAllRoles = () => {
+const viewAllRoles = () => {
     db.query('SELECT * FROM role', (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -14,7 +14,7 @@ const listAllRoles = () => {
     })
 }
 
-const listAllEmployees = () => {
+const viewAllEmployees = () => {
     db.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
         console.table(res);
