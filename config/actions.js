@@ -283,24 +283,35 @@ const updateEmployeeManager = () => {
         })
 }
 
-const deleteDepartment = () => {
-    inquirer.prompt(
-        {
-            type: 'input',
-            name: 'department_id',
-            message: 'What is the ID of the department you would like to delete?',
-        }
-    )
-        .then((answer) => {
-            const { department_id } = answer
+const deleteDepartment = async () => {
+    const db = await getConnection();
 
-            db.query('DELETE FROM department WHERE ?', { id: department_id }, (err, res) => {
-                if (err) throw err;
-                console.log('Department deleted!');
+    // Query to get all departments
+    const [departments] = await db.query('SELECT * FROM department');
 
-            })
-        })
+    // Format departments as choices for inquirer
+    const departmentChoices = departments.map(department => ({
+        name: department.name,
+        value: department.id,
+    }));
+
+    const answer = await inquirer.prompt({
+        type: 'list',
+        name: 'department_id',
+        message: 'Which department would you like to delete?',
+        choices: departmentChoices,
+    });
+
+    const { department_id } = answer;
+
+    try {
+        await db.query('DELETE FROM department WHERE id = ?', [department_id]);
+        console.log('Department deleted!');
+    } catch (err) {
+        console.error(`Error deleting the department: ${err}`);
+    }
 }
+
 
 const deleteRole = () => {
     inquirer.prompt(
