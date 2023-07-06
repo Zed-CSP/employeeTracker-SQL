@@ -14,7 +14,6 @@ connection.connect((err) => {
 
     // run the start function after the connection is made to prompt the user
     console.log('connected as id ' + connection.threadId);
-    display(actions.results);
     init();
 });
 
@@ -22,97 +21,94 @@ const refresh = () => {
     console.clear();
     titleArt();
     console.log('connected as id ' + connection.threadId);
-    display(actions.results);
     init();
 }
 
-function promptWithDelay(questions, delayMs) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(inquirer.prompt());
-      }, delayMs);
-    });
-  }
-
 // function which prompts the user for what action they should take
 const init = () => {
-    inquirer.prompt(
-        {
-            type: 'list',
-            name: 'action',
-            message: '?',
-            choices: [
-                'List all Departments',
-                'View Department Budgets',
-                'List all Roles',
-                'List all Employees',
-                'Add a Department',
-                'Add a Role',
-                'Add an Employee',
-                'Update an Employee Role',
-                'Update an Employee Manager',
-                'Delete a Department',
-                'Delete a Role',
-                'Delete an Employee',
-                'Exit',
-            ]
-        }) .then ((answer) => {
-            const { action } = answer
-            
-            if (action === 'List all Departments') {
-                actions.viewAllDepartments();
-                refresh();
-                }
-        
-            if (action === 'View Department Budgets') {
+    setTimeout(() => {
+      inquirer
+        .prompt({
+          type: 'list',
+          name: 'action',
+          message: '?',
+          choices: [
+            'List all Departments',
+            'View Department Budgets',
+            'List all Roles',
+            'List all Employees',
+            'Add a Department',
+            'Add a Role',
+            'Add an Employee',
+            'Update an Employee Role',
+            'Update an Employee Manager',
+            'Delete a Department',
+            'Delete a Role',
+            'Delete an Employee',
+            'Exit',
+          ],
+        })
+        .then((answer) => {
+          const { action } = answer;
+  
+          if (action === 'List all Departments') {
+            actions.viewAllDepartments();
+            refresh();
+          }
+  
+          if (action === 'View Department Budgets') {
             actions.viewDepartmentBudgets();
             refresh();
-            }
-            if (action === 'List all Roles') {
+          }
+  
+          if (action === 'List all Roles') {
             actions.viewAllRoles();
             refresh();
-            }
-        if (action === 'List all Employees') {
+          }
+  
+          if (action === 'List all Employees') {
             actions.viewAllEmployees();
-        }
-
-        if (action === 'Add a Department') {
+          }
+  
+          if (action === 'Add a Department') {
             actions.addDepartment();
-        }
-
-        if (action === 'Add a Role') {
+          }
+  
+          if (action === 'Add a Role') {
             actions.addRole();
-        }
-
-        if (action === 'Add an Employee') {
+          }
+  
+          if (action === 'Add an Employee') {
             actions.addEmployee();
-        }
-
-        if (action === 'Update an Employee Role') {
+          }
+  
+          if (action === 'Update an Employee Role') {
             actions.updateEmployeeRole();
-        }
-
-        if (action === 'Update an Employee Manager') {
+          }
+  
+          if (action === 'Update an Employee Manager') {
             actions.updateEmployeeManager();
-        }
-
-        if (action === 'Delete a Department') {
+          }
+  
+          if (action === 'Delete a Department') {
             actions.deleteDepartment();
-        }
-
-        if (action === 'Delete a Role') {
+          }
+  
+          if (action === 'Delete a Role') {
             actions.deleteRole();
-        }
-
-        if (action === 'Delete an Employee') {
+          }
+  
+          if (action === 'Delete an Employee') {
             actions.deleteEmployee();
-        }
-
-        if (action === 'Exit') {
+          }
+  
+          if (action === 'Exit') {
             exit();
-        }
-    })
-};
+          }
+        });
+    }, 250); // Delay of 1 second (1000 milliseconds)
+  };
+  
 
 
 function display(results) {
