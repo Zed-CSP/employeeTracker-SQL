@@ -1,15 +1,17 @@
 const db = require('./connections.js')
 const init = require('../app.js')
 
+var results = [];
+
 const viewAllDepartments = () => {
     console.log('Viewing all departments...\n');
-    new Promise(db.query('SELECT * FROM department', (err, res) => {
+    db.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
         console.log('\n')
         console.table(res);
         console.log('\n')
         return true;
-    }))
+    })
 }
 
 const viewAllRoles = () => {
@@ -26,6 +28,7 @@ const viewAllEmployees = () => {
     console.log('Viewing all employees...\n');
     db.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
+        var results = res;
         console.table(res);
     })
 }
@@ -303,6 +306,7 @@ const viewDepartmentBudget = () => {
 // }
 
 module.exports = {
+    results,
     viewAllDepartments,
     viewAllRoles,
     viewAllEmployees,

@@ -3,19 +3,36 @@ const mysql = require('mysql2');
 const connection = require('./config/connections.js');
 const actions = require('./config/actions.js');
 const titleArt = require('./assets/ascii.js');
+
  
 
 
 // connect to the mysql server and sql database
 connection.connect((err) => {
     if (err) throw err;
-
     titleArt();
+
     // run the start function after the connection is made to prompt the user
     console.log('connected as id ' + connection.threadId);
-
+    display(actions.results);
     init();
 });
+
+const refresh = () => {
+    console.clear();
+    titleArt();
+    console.log('connected as id ' + connection.threadId);
+    display(actions.results);
+    init();
+}
+
+function promptWithDelay(questions, delayMs) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(inquirer.prompt());
+      }, delayMs);
+    });
+  }
 
 // function which prompts the user for what action they should take
 const init = () => {
@@ -39,27 +56,22 @@ const init = () => {
                 'Delete an Employee',
                 'Exit',
             ]
-        }
-        )
-        .then ((answer) => {
+        }) .then ((answer) => {
             const { action } = answer
             
             if (action === 'List all Departments') {
-                console.log('\n');
-                async() => {
-                    await actions.viewAllDepartments();
-                    goBack();
+                actions.viewAllDepartments();
+                refresh();
                 }
-        }
         
-        if (action === 'View Department Budgets') {
+            if (action === 'View Department Budgets') {
             actions.viewDepartmentBudgets();
-        }
-
-        if (action === 'List all Roles') {
+            refresh();
+            }
+            if (action === 'List all Roles') {
             actions.viewAllRoles();
-        }
-
+            refresh();
+            }
         if (action === 'List all Employees') {
             actions.viewAllEmployees();
         }
@@ -100,6 +112,11 @@ const init = () => {
             exit();
         }
     })
+};
+
+
+function display(results) {
+    console.table(results);
 };
 
 const goBack = () => {
