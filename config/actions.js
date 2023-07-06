@@ -8,7 +8,6 @@ const viewAllDepartments = () => {
     return new Promise((resolve, reject) => {
         db.query('SELECT * FROM department', (err, res) => {
             if (err) reject(err);
-            var results = console.table(res);
             resolve(res);
         })
     });
@@ -19,11 +18,7 @@ const viewAllRoles = () => {
     return new Promise((resolve, reject) => {
         db.query('SELECT * FROM role', (err, res) => {
             if (err) throw err;
-            var results = res;
-            console.log('\n')
-            console.table(res);
-            console.log('\n')
-            resolve(true);
+            resolve(res);
         })
     });
 }
@@ -33,9 +28,7 @@ const viewAllEmployees = () => {
     return new Promise((resolve, reject) => {
         db.query('SELECT * FROM employee', (err, res) => {
             if (err) throw err;
-            var results = res;
-            console.table(res);
-            resolve(true);
+            resolve(res);
         })
     });
 }
