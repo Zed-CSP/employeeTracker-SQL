@@ -27,115 +27,99 @@ const refresh = () => {
 // function which prompts the user for what action they should take
 const init = () => {
     setTimeout(() => {
-      inquirer
-        .prompt({
-          type: 'list',
-          name: 'action',
-          message: '?',
-          choices: [
-            'List all Departments',
-            'View Department Budgets',
-            'List all Roles',
-            'List all Employees',
-            'Add a Department',
-            'Add a Role',
-            'Add an Employee',
-            'Update an Employee Role',
-            'Update an Employee Manager',
-            'Delete a Department',
-            'Delete a Role',
-            'Delete an Employee',
-            'Exit',
-          ],
+        inquirer.prompt({
+            type: 'list',
+            name: 'action',
+            message: '?',
+            choices: [
+                'List all Departments',
+                'View Department Budgets',
+                'List all Roles',
+                'List all Employees',
+                'Add a Department',
+                'Add a Role',
+                'Add an Employee',
+                'Update an Employee Role',
+                'Update an Employee Manager',
+                'Delete a Department',
+                'Delete a Role',
+                'Delete an Employee',
+                'Exit',
+            ],
         })
         .then((answer) => {
-          const { action } = answer;
+            const { action } = answer;
   
-          if (action === 'List all Departments') {
-            actions.viewAllDepartments();
-            refresh();
-          }
+            if (action === 'List all Departments') {
+                actions.viewAllDepartments();
+                refresh();
+            }
   
-          if (action === 'View Department Budgets') {
-            actions.viewDepartmentBudgets();
-            refresh();
-          }
+            if (action === 'View Department Budgets') {
+                actions.viewDepartmentBudgets();
+                refresh();
+            }
   
-          if (action === 'List all Roles') {
-            actions.viewAllRoles();
-            refresh();
-          }
+            if (action === 'List all Roles') {
+                actions.viewAllRoles();
+                refresh();
+            }
   
-          if (action === 'List all Employees') {
-            actions.viewAllEmployees();
-          }
+            if (action === 'List all Employees') {
+                actions.viewAllEmployees();
+                refresh();
+            }
   
-          if (action === 'Add a Department') {
-            actions.addDepartment();
-          }
+            if (action === 'Add a Department') {
+                actions.addDepartment();
+                refresh();
+            }
   
-          if (action === 'Add a Role') {
-            actions.addRole();
-          }
+            if (action === 'Add a Role') {
+                actions.addRole();
+                refresh();
+            }
   
-          if (action === 'Add an Employee') {
-            actions.addEmployee();
-          }
+            if (action === 'Add an Employee') {
+                actions.addEmployee();
+                refresh();
+            }
   
-          if (action === 'Update an Employee Role') {
-            actions.updateEmployeeRole();
-          }
+            if (action === 'Update an Employee Role') {
+                actions.updateEmployeeRole();
+                refresh();
+            }
   
-          if (action === 'Update an Employee Manager') {
-            actions.updateEmployeeManager();
-          }
+            if (action === 'Update an Employee Manager') {
+                actions.updateEmployeeManager();
+                refresh();
+            }
   
-          if (action === 'Delete a Department') {
-            actions.deleteDepartment();
-          }
+            if (action === 'Delete a Department') {
+                actions.deleteDepartment();
+                refresh();
+            }
   
-          if (action === 'Delete a Role') {
-            actions.deleteRole();
-          }
+            if (action === 'Delete a Role') {
+                actions.deleteRole();
+                refresh();
+            }
   
-          if (action === 'Delete an Employee') {
-            actions.deleteEmployee();
-          }
+            if (action === 'Delete an Employee') {
+                actions.deleteEmployee();
+                refresh();
+            }
   
-          if (action === 'Exit') {
-            exit();
-          }
+            if (action === 'Exit') {
+                exit();
+            }
         });
-    }, 250); // Delay of 1 second (1000 milliseconds)
-  };
-  
+    }, 250); // Delay of aggressive inquirer prompt
+};
 
 
 function display(results) {
     console.table(results);
-};
-
-const goBack = () => {
-    inquirer.prompt(
-        {
-            type: 'list',
-            name: 'action',
-            message: 'Would you like to go back to the main menu?',
-            choices: [
-                'Yes',
-                'No',
-            ]
-        }
-    )
-    .then ((answer) => {
-        const { action } = answer
-
-        if (action === 'Yes') {
-            init();
-        } else {
-            exit();
-        }
-    })
 };
 
 const exit = () => {
