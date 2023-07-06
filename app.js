@@ -33,9 +33,9 @@ const init = () => {
             message: '?',
             choices: [
                 'List all Departments',
-                'View Department Budgets',
                 'List all Roles',
                 'List all Employees',
+                'View Department Budgets',
                 'Add a Department',
                 'Add a Role',
                 'Add an Employee',
@@ -47,66 +47,66 @@ const init = () => {
                 'Exit',
             ],
         })
-        .then((answer) => {
+        .then(async(answer) => {
             const { action } = answer;
   
             if (action === 'List all Departments') {
-                actions.viewAllDepartments();
+                await actions.viewAllDepartments();
                 refresh();
             }
   
             if (action === 'View Department Budgets') {
-                actions.viewDepartmentBudgets();
+                await actions.viewDepartmentBudget();
                 refresh();
             }
   
             if (action === 'List all Roles') {
-                actions.viewAllRoles();
+                await actions.viewAllRoles();
                 refresh();
             }
   
             if (action === 'List all Employees') {
-                actions.viewAllEmployees();
+                await actions.viewAllEmployees();
                 refresh();
             }
   
             if (action === 'Add a Department') {
-                actions.addDepartment();
+                await actions.addDepartment();
                 refresh();
             }
   
             if (action === 'Add a Role') {
-                actions.addRole();
+                await actions.addRole();
                 refresh();
             }
   
             if (action === 'Add an Employee') {
-                actions.addEmployee();
+                await actions.addEmployee();
                 refresh();
             }
   
             if (action === 'Update an Employee Role') {
-                actions.updateEmployeeRole();
+                await actions.updateEmployeeRole();
                 refresh();
             }
   
             if (action === 'Update an Employee Manager') {
-                actions.updateEmployeeManager();
+                await actions.updateEmployeeManager();
                 refresh();
             }
   
             if (action === 'Delete a Department') {
-                actions.deleteDepartment();
+                await actions.deleteDepartment();
                 refresh();
             }
   
             if (action === 'Delete a Role') {
-                actions.deleteRole();
+                await actions.deleteRole();
                 refresh();
             }
   
             if (action === 'Delete an Employee') {
-                actions.deleteEmployee();
+                await actions.deleteEmployee();
                 refresh();
             }
   

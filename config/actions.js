@@ -1,5 +1,6 @@
 const db = require('./connections.js')
 const init = require('../app.js')
+const inquirer = require('inquirer');
 
 var results = [];
 
@@ -42,15 +43,16 @@ const addDepartment = () => {
             message: 'What is the name of the department you would like to add?',
         }
     )
-        .then((answer) => {
-            const { department_name } = answer
+    .then((answer) => {
+        const { department_name } = answer
 
-            db.query('INSERT INTO department SET ?', { name: department_name }, (err, res) => {
-                if (err) throw err;
-                console.log('Department added!');
+        db.query('INSERT INTO department SET ?', { name: department_name }, (err, res) => {
+            if (err) throw err;
+            console.log('Department added!');
 
-            })
         })
+    })
+    return true;
 }
 
 const addRole = () => {
