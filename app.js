@@ -1,21 +1,11 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const connection = require('./config/connections.js');
 const actions = require('./config/actions.js');
 const titleArt = require('./assets/ascii.js');
 
  
 
-
-// connect to the mysql server and sql database
-connection.connect((err) => {
-    if (err) throw err;
-    titleArt();
-
-    // run the start function after the connection is made to prompt the user
-    console.log('connected as id ' + connection.threadId);
-    init();
-});
 
 const refresh = (res) => {
     console.clear();
@@ -32,7 +22,7 @@ const init = async() => {
         const { action } = await inquirer.prompt([{
             type: 'list',
             name: 'action',
-            message: '?',
+            message: 'Main Menu:',
             choices: [
                 'List all Departments',
                 'List all Roles',
@@ -105,5 +95,8 @@ const exit = () => {
     connection.end();
     process.exit();
 };
+
+titleArt();
+init();
 
 module.exports = init;
