@@ -1,13 +1,13 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const db = require('./config/connections.js');
+const connection = require('./config/connections.js');
 const actions = require('./config/actions.js');
 const titleArt = require('./assets/ascii.js');
  
 
 
 // connect to the mysql server and sql database
-db.connect((err) => {
+connection.connect((err) => {
     if (err) throw err;
 
     titleArt();
@@ -22,7 +22,7 @@ const init = () => {
     inquirer.prompt(
         {
             type: 'list',
-            name: 'admin_action',
+            name: 'action',
             message: '?',
             choices: [
                 'List all Departments',
@@ -40,24 +40,28 @@ const init = () => {
                 'Exit',
             ]
         }
-    )
-    .then ((answer) => {
-        const { action } = answer
-
-        if (action === 'List all Departments') {
-            actions.listAllDepartments();
+        )
+        .then ((answer) => {
+            const { action } = answer
+            
+            if (action === 'List all Departments') {
+                console.log('\n');
+                async() => {
+                    await actions.viewAllDepartments();
+                    goBack();
+                }
         }
-
+        
         if (action === 'View Department Budgets') {
             actions.viewDepartmentBudgets();
         }
 
         if (action === 'List all Roles') {
-            actions.listAllRoles();
+            actions.viewAllRoles();
         }
 
         if (action === 'List all Employees') {
-            actions.listAllEmployees();
+            actions.viewAllEmployees();
         }
 
         if (action === 'Add a Department') {
@@ -93,7 +97,39 @@ const init = () => {
         }
 
         if (action === 'Exit') {
-            actions.exit();
+            exit();
         }
     })
 };
+
+const goBack = () => {
+    inquirer.prompt(
+        {
+            type: 'list',
+            name: 'action',
+            message: 'Would you like to go back to the main menu?',
+            choices: [
+                'Yes',
+                'No',
+            ]
+        }
+    )
+    .then ((answer) => {
+        const { action } = answer
+
+        if (action === 'Yes') {
+            init();
+        } else {
+            exit();
+        }
+    })
+};
+
+const exit = () => {
+    console.log('Goodbye!');
+    connection.end();
+    process.exit();
+};
+
+
+module.exports = init;

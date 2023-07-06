@@ -1,28 +1,37 @@
+const db = require('./connections.js')
+const init = require('../app.js')
+
 const viewAllDepartments = () => {
-    db.query('SELECT * FROM department', (err, res) => {
+    console.log('Viewing all departments...\n');
+    new Promise(db.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
+        console.log('\n')
         console.table(res);
-        init();
-    })
+        console.log('\n')
+        return true;
+    }))
 }
 
 const viewAllRoles = () => {
+    console.log('Viewing all roles...\n');
     db.query('SELECT * FROM role', (err, res) => {
         if (err) throw err;
+        console.log('\n')
         console.table(res);
-        init();
+        console.log('\n')
     })
 }
 
 const viewAllEmployees = () => {
+    console.log('Viewing all employees...\n');
     db.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
         console.table(res);
-        init();
     })
 }
 
 const addDepartment = () => {
+    console.log('Adding a department...\n');
     inquirer.prompt(
         {
             type: 'input',
@@ -30,15 +39,15 @@ const addDepartment = () => {
             message: 'What is the name of the department you would like to add?',
         }
     )
-    .then ((answer) => {
-        const { department_name } = answer
+        .then((answer) => {
+            const { department_name } = answer
 
-        db.query('INSERT INTO department SET ?', { name: department_name }, (err, res) => {
-            if (err) throw err;
-            console.log('Department added!');
-            init();
+            db.query('INSERT INTO department SET ?', { name: department_name }, (err, res) => {
+                if (err) throw err;
+                console.log('Department added!');
+
+            })
         })
-    })
 }
 
 const addRole = () => {
@@ -59,15 +68,15 @@ const addRole = () => {
             message: 'What is the department ID of the role you would like to add?',
         }
     ])
-    .then ((answer) => {
-        const { role_title, role_salary, role_department_id } = answer
+        .then((answer) => {
+            const { role_title, role_salary, role_department_id } = answer
 
-        db.query('INSERT INTO role SET ?', { title: role_title, salary: role_salary, department_id: role_department_id }, (err, res) => {
-            if (err) throw err;
-            console.log('Role added!');
-            init();
+            db.query('INSERT INTO role SET ?', { title: role_title, salary: role_salary, department_id: role_department_id }, (err, res) => {
+                if (err) throw err;
+                console.log('Role added!');
+
+            })
         })
-    })
 }
 
 const addEmployee = () => {
@@ -93,15 +102,15 @@ const addEmployee = () => {
             message: 'What is the manager ID of the employee you would like to add?',
         }
     ])
-    .then ((answer) => {
-        const { employee_first_name, employee_last_name, employee_role_id, employee_manager_id } = answer
+        .then((answer) => {
+            const { employee_first_name, employee_last_name, employee_role_id, employee_manager_id } = answer
 
-        db.query('INSERT INTO employee SET ?', { first_name: employee_first_name, last_name: employee_last_name, role_id: employee_role_id, manager_id: employee_manager_id }, (err, res) => {
-            if (err) throw err;
-            console.log('Employee added!');
-            init();
+            db.query('INSERT INTO employee SET ?', { first_name: employee_first_name, last_name: employee_last_name, role_id: employee_role_id, manager_id: employee_manager_id }, (err, res) => {
+                if (err) throw err;
+                console.log('Employee added!');
+
+            })
         })
-    })
 }
 
 const updateEmployeeRole = () => {
@@ -117,15 +126,15 @@ const updateEmployeeRole = () => {
             message: 'What is the new role ID of the employee you would like to update?',
         }
     ])
-    .then ((answer) => {
-        const { employee_id, employee_role_id } = answer
+        .then((answer) => {
+            const { employee_id, employee_role_id } = answer
 
-        db.query('UPDATE employee SET ? WHERE ?', [{ role_id: employee_role_id }, { id: employee_id }], (err, res) => {
-            if (err) throw err;
-            console.log('Employee updated!');
-            init();
+            db.query('UPDATE employee SET ? WHERE ?', [{ role_id: employee_role_id }, { id: employee_id }], (err, res) => {
+                if (err) throw err;
+                console.log('Employee updated!');
+
+            })
         })
-    })
 }
 
 const updateEmployeeManager = () => {
@@ -141,15 +150,15 @@ const updateEmployeeManager = () => {
             message: 'What is the new manager ID of the employee you would like to update?',
         }
     ])
-    .then ((answer) => {
-        const { employee_id, employee_manager_id } = answer
+        .then((answer) => {
+            const { employee_id, employee_manager_id } = answer
 
-        db.query('UPDATE employee SET ? WHERE ?', [{ manager_id: employee_manager_id }, { id: employee_id }], (err, res) => {
-            if (err) throw err;
-            console.log('Employee updated!');
-            init();
+            db.query('UPDATE employee SET ? WHERE ?', [{ manager_id: employee_manager_id }, { id: employee_id }], (err, res) => {
+                if (err) throw err;
+                console.log('Employee updated!');
+
+            })
         })
-    })
 }
 
 const deleteDepartment = () => {
@@ -160,15 +169,15 @@ const deleteDepartment = () => {
             message: 'What is the ID of the department you would like to delete?',
         }
     )
-    .then ((answer) => {
-        const { department_id } = answer
+        .then((answer) => {
+            const { department_id } = answer
 
-        db.query('DELETE FROM department WHERE ?', { id: department_id }, (err, res) => {
-            if (err) throw err;
-            console.log('Department deleted!');
-            init();
+            db.query('DELETE FROM department WHERE ?', { id: department_id }, (err, res) => {
+                if (err) throw err;
+                console.log('Department deleted!');
+
+            })
         })
-    })
 }
 
 const deleteRole = () => {
@@ -179,15 +188,15 @@ const deleteRole = () => {
             message: 'What is the ID of the role you would like to delete?',
         }
     )
-    .then ((answer) => {
-        const { role_id } = answer
+        .then((answer) => {
+            const { role_id } = answer
 
-        db.query('DELETE FROM role WHERE ?', { id: role_id }, (err, res) => {
-            if (err) throw err;
-            console.log('Role deleted!');
-            init();
+            db.query('DELETE FROM role WHERE ?', { id: role_id }, (err, res) => {
+                if (err) throw err;
+                console.log('Role deleted!');
+
+            })
         })
-    })
 }
 
 const deleteEmployee = () => {
@@ -198,15 +207,15 @@ const deleteEmployee = () => {
             message: 'What is the ID of the employee you would like to delete?',
         }
     )
-    .then ((answer) => {
-        const { employee_id } = answer
+        .then((answer) => {
+            const { employee_id } = answer
 
-        db.query('DELETE FROM employee WHERE ?', { id: employee_id }, (err, res) => {
-            if (err) throw err;
-            console.log('Employee deleted!');
-            init();
+            db.query('DELETE FROM employee WHERE ?', { id: employee_id }, (err, res) => {
+                if (err) throw err;
+                console.log('Employee deleted!');
+
+            })
         })
-    })
 }
 
 const viewDepartmentBudget = () => {
@@ -217,15 +226,15 @@ const viewDepartmentBudget = () => {
             message: 'What is the ID of the department you would like to view the budget for?',
         }
     )
-    .then ((answer) => {
-        const { department_id } = answer
+        .then((answer) => {
+            const { department_id } = answer
 
-        db.query('SELECT SUM(salary) AS budget FROM role WHERE department_id = ?', [department_id], (err, res) => {
-            if (err) throw err;
-            console.table(res);
-            init();
+            db.query('SELECT SUM(salary) AS budget FROM role WHERE department_id = ?', [department_id], (err, res) => {
+                if (err) throw err;
+                console.table(res);
+
+            })
         })
-    })
 }
 
 // const viewEmployeesByManager = () => {
@@ -242,7 +251,7 @@ const viewDepartmentBudget = () => {
 //         db.query('SELECT * FROM employee WHERE manager_id = ?', [manager_id], (err, res) => {
 //             if (err) throw err;
 //             console.table(res);
-//             init();
+//    
 //         })
 //     })
 // }
@@ -261,7 +270,7 @@ const viewDepartmentBudget = () => {
 //         db.query('SELECT * FROM employee INNER JOIN role ON employee.role_id = role.id WHERE role.department_id = ?', [department_id], (err, res) => {
 //             if (err) throw err;
 //             console.table(res);
-//             init();
+//    
 //         })
 //     })
 // }
@@ -270,7 +279,7 @@ const viewDepartmentBudget = () => {
 //     db.query('SELECT department.name AS department, SUM(role.salary) AS budget, COUNT(employee.id) AS headcount FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id GROUP BY department.name', (err, res) => {
 //         if (err) throw err;
 //         console.table(res);
-//         init();
+//
 //     })
 // }
 
