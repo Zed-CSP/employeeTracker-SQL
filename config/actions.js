@@ -35,23 +35,21 @@ const viewAllEmployees = () => {
 
 const addDepartment = () => {
     console.log('Adding a department...\n');
-    inquirer.prompt(
-        {
-            type: 'input',
-            name: 'department_name',
-            message: 'What is the name of the department you would like to add?',
-        }
-    )
+    return inquirer.prompt({
+        type: 'input',
+        name: 'department_name',
+        message: 'What is the name of the department you would like to add?',
+    })
     .then((answer) => {
-        const { department_name } = answer
-
+        const { department_name } = answer;
+        return new Promise((resolve, reject) => {
             db.query('INSERT INTO department SET ?', { name: department_name }, (err, res) => {
-                if (err) throw err;
+                if (err) reject(err);
                 console.log('Department added!');
-
-                return true;
-            })
-        })
+                resolve(true);
+            });
+        });
+    });
 }
 
 const addRole = () => {
