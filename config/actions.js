@@ -2,36 +2,42 @@ const db = require('./connections.js')
 const init = require('../app.js')
 const inquirer = require('inquirer');
 
-var results = [];
 
 const viewAllDepartments = () => {
     console.log('Viewing all departments...\n');
-    db.query('SELECT * FROM department', (err, res) => {
-        if (err) throw err;
-        console.log('\n')
-        console.table(res);
-        console.log('\n')
-        return true;
-    })
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM department', (err, res) => {
+            if (err) reject(err);
+            var results = console.table(res);
+            resolve(res);
+        })
+    });
 }
 
 const viewAllRoles = () => {
     console.log('Viewing all roles...\n');
-    db.query('SELECT * FROM role', (err, res) => {
-        if (err) throw err;
-        console.log('\n')
-        console.table(res);
-        console.log('\n')
-    })
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM role', (err, res) => {
+            if (err) throw err;
+            var results = res;
+            console.log('\n')
+            console.table(res);
+            console.log('\n')
+            resolve(true);
+        })
+    });
 }
 
 const viewAllEmployees = () => {
     console.log('Viewing all employees...\n');
-    db.query('SELECT * FROM employee', (err, res) => {
-        if (err) throw err;
-        var results = res;
-        console.table(res);
-    })
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM employee', (err, res) => {
+            if (err) throw err;
+            var results = res;
+            console.table(res);
+            resolve(true);
+        })
+    });
 }
 
 const addDepartment = () => {
@@ -46,13 +52,13 @@ const addDepartment = () => {
     .then((answer) => {
         const { department_name } = answer
 
-        db.query('INSERT INTO department SET ?', { name: department_name }, (err, res) => {
-            if (err) throw err;
-            console.log('Department added!');
+            db.query('INSERT INTO department SET ?', { name: department_name }, (err, res) => {
+                if (err) throw err;
+                console.log('Department added!');
 
+                return true;
+            })
         })
-    })
-    return true;
 }
 
 const addRole = () => {
@@ -308,7 +314,7 @@ const viewDepartmentBudget = () => {
 // }
 
 module.exports = {
-    results,
+
     viewAllDepartments,
     viewAllRoles,
     viewAllEmployees,

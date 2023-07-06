@@ -17,17 +17,19 @@ connection.connect((err) => {
     init();
 });
 
-const refresh = () => {
+const refresh = (res) => {
     console.clear();
     titleArt();
     console.log('connected as id ' + connection.threadId);
+    if(res) display(res);
+    else console.log('\n');
     init();
 }
 
 // function which prompts the user for what action they should take
-const init = () => {
-    setTimeout(() => {
-        inquirer.prompt({
+const init = async() => {
+    setTimeout(async() => {
+        const { action } = await inquirer.prompt([{
             type: 'list',
             name: 'action',
             message: '?',
@@ -46,76 +48,52 @@ const init = () => {
                 'Delete an Employee',
                 'Exit',
             ],
-        })
-        .then(async(answer) => {
-            const { action } = answer;
-  
-            if (action === 'List all Departments') {
-                await actions.viewAllDepartments();
-                refresh();
-            }
-  
-            if (action === 'View Department Budgets') {
-                await actions.viewDepartmentBudget();
-                refresh();
-            }
-  
-            if (action === 'List all Roles') {
-                await actions.viewAllRoles();
-                refresh();
-            }
-  
-            if (action === 'List all Employees') {
-                await actions.viewAllEmployees();
-                refresh();
-            }
-  
-            if (action === 'Add a Department') {
-                await actions.addDepartment();
-                refresh();
-            }
-  
-            if (action === 'Add a Role') {
-                await actions.addRole();
-                refresh();
-            }
-  
-            if (action === 'Add an Employee') {
-                await actions.addEmployee();
-                refresh();
-            }
-  
-            if (action === 'Update an Employee Role') {
-                await actions.updateEmployeeRole();
-                refresh();
-            }
-  
-            if (action === 'Update an Employee Manager') {
-                await actions.updateEmployeeManager();
-                refresh();
-            }
-  
-            if (action === 'Delete a Department') {
-                await actions.deleteDepartment();
-                refresh();
-            }
-  
-            if (action === 'Delete a Role') {
-                await actions.deleteRole();
-                refresh();
-            }
-  
-            if (action === 'Delete an Employee') {
-                await actions.deleteEmployee();
-                refresh();
-            }
-  
-            if (action === 'Exit') {
-                exit();
-            }
-        });
+        }]);
+        
+        switch (action) {
+            case 'List all Departments':
+                await actions.viewAllDepartments().then(refresh);
+                break;
+            case 'List all Roles':
+                await actions.viewAllRoles().then(refresh);
+                break;
+            case 'List all Employees':
+                await actions.viewAllEmployees().then(refresh);
+                break;
+            case 'View Department Budgets':
+                await actions.viewDepartmentBudget().then(refresh);
+                break;
+            case 'Add a Department':
+                await actions.addDepartment().then(refresh);
+                break;
+            case 'Add a Role':
+                await actions.addRole().then(refresh);
+                break;
+            case 'Add an Employee':
+                await actions.addEmployee().then(refresh);
+                break;
+            case 'Update an Employee Role':
+                await actions.updateEmployeeRole().then(refresh);
+                break;
+            case 'Update an Employee Manager':
+                await actions.updateEmployeeManager().then(refresh);
+                break;
+            case 'Delete a Department':
+                await actions.deleteDepartment().then(refresh);
+                break;
+            case 'Delete a Role':
+                await actions.deleteRole().then(refresh);
+                break;
+            case 'Delete an Employee':
+                await actions.deleteEmployee().then(refresh);
+                break;
+            case 'Exit':
+                process.exit(0);
+                break;
+        };
     }, 250); // Delay of aggressive inquirer prompt
 };
+
 
 
 function display(results) {
@@ -127,6 +105,5 @@ const exit = () => {
     connection.end();
     process.exit();
 };
-
 
 module.exports = init;
