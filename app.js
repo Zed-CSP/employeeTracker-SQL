@@ -60,7 +60,8 @@ const init = async() => {
                 await actions.addRole().then(refresh);
                 break;
             case 'Add an Employee':
-                await actions.addEmployee().then(refresh);
+                await actions.addEmployee()//.then(refresh)
+                ;
                 break;
             case 'Update an Employee Role':
                 await actions.updateEmployeeRole().then(refresh);
