@@ -1,4 +1,3 @@
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # Employee Database
   
@@ -34,13 +33,13 @@
 10. Run the application by typing `npm start` in the command line.
   
 ## Usage
-    This Is a Simple CLI propgram that allows the user to CRUD a SQL Employee Database.  The user will see a splash screen and be prompted through database view options and user actions. The actions should account for nuances of user data needed for the task at hand. Enjoy the 90's television easteregg in the seeded data! Inorder to get the 'aggressive' nature of the nested inquirer prompts to await the user play well I had to employ alot of 'promises' and upgrade to the MYSQL2/promises package
+This Is a Simple CLI propgram that allows the user to CRUD a SQL Employee Database.  The user will see a splash screen and be prompted through database view options and user actions. The actions should account for nuances of user data needed for the task at hand. Enjoy the 90's television easteregg in the seeded data! Inorder to get the 'aggressive' nature of the nested inquirer prompts to await the user play well I had to employ alot of 'promises' and upgrade to the MYSQL2/promises package
 
 ## Demo
-    View a video walkthrough of the app [here]().
+View a video walkthrough of the app [here]().
 
 ## License
-    This project is licensed under the MIT License - see Badge link for details.
+This project is licensed under the MIT License - see Badge link for details.
   
 ## Questions
-    If you have any questions or issues with the repo, please reach out to "[Zed-CSP]("https://github.com/Zed-CSP")" or create an issue in the "["repo"]()".
+If you have any questions or issues with the repo, please reach out to "[Zed-CSP]("https://github.com/Zed-CSP")" or create an issue in the "["repo"]()".
