@@ -323,7 +323,7 @@ const updateEmployeeManager = async () => {
         const managers = employees.filter(employee => managerIds.includes(employee.id));
 
         // Map to get employee and manager names
-        const employeeNames = employees.map(employee => employee.full_name);
+        const employeeNames = employees.map(employee => `${employee.full_name} (${employee.department_name}: ${employee.role_name})`);
         // Include department name and role in manager's choice
         const managerNames = managers.map(manager => `${manager.full_name} (${manager.department_name}: ${manager.role_name})`);
 
@@ -353,8 +353,16 @@ const updateEmployeeManager = async () => {
         const manager_name = new_manager_name.split(" (")[0];
 
         // Find the IDs of the selected employee and manager
-        const selectedEmployee = employees.find(employee => employee.full_name === employee_name);
-        const selectedManager = managers.find(manager => manager.full_name === manager_name);
+        const selectedEmployee = employees.find(employee => {
+            const [name] = employee_name.split(" (");
+            return employee.full_name === name;
+        });
+
+        const selectedManager = managers.find(manager => {
+            const [name] = manager_name.split(" (");
+            return manager.full_name === name;
+        });
+
 
         console.log("Selected Employee:", selectedEmployee);
         console.log("Selected Manager:", selectedManager);
