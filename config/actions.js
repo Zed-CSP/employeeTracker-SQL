@@ -258,66 +258,116 @@ const addEmployee = async () => {
     }
 };
 
+const updateEmployeeRole = async () => {
+    try {
+        console.log('Updating an employee role...\n');
+        const db = await getConnection();
+
+        // Fetch roles and employees from the database
+        const [rolesResponse] = await db.query('SELECT id, title FROM role');
+        const [employeesResponse] = await db.query('SELECT id, first_name, last_name FROM employee');
+
+        // Convert the responses to arrays of choices
+        const roleChoices = rolesResponse.map(role => ({ name: role.title, value: role.id }));
+        const employeeChoices = employeesResponse.map(employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id }));
+
+        // Then prompt the user
+        const answer = await inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employee_id',
+                message: 'Which employee\'s role would you like to update?',
+                choices: employeeChoices,
+            },
+            {
+                type: 'list',
+                name: 'employee_role_id',
+                message: 'What is the new role of the employee?',
+                choices: roleChoices,
+            }
+        ]);
+
+        const { employee_id, employee_role_id } = answer;
+
+        // Update the selected employee's role
+        await db.query('UPDATE employee SET ? WHERE ?', [{ role_id: employee_role_id }, { id: employee_id }]);
+
+        console.log('Employee updated!');
+        return true;
+    } catch (error) {
+        console.error(`Failed to update employee: ${error}`);
+        return false;
+    }
+};
 
 
+const updateEmployeeManager = async () => {
+    try {
+        const db = await getConnection();
 
+        // Select the employee's full name, department name, and role title for each employee
+        const employeesResponse = await db.query(`
+          SELECT employee.id, CONCAT(employee.first_name, " ", employee.last_name) AS full_name, department.name AS department_name, role.title AS role_name
+          FROM employee
+          JOIN role ON employee.role_id = role.id
+          JOIN department ON role.department_id = department.id
+        `);
+        const managersResponse = await db.query('SELECT DISTINCT manager_id FROM employee WHERE manager_id IS NOT NULL');
 
+        // Extract actual rows from the responses
+        const employees = employeesResponse[0];
+        const managersResponseRows = managersResponse[0];
 
-// const updateEmployeeRole = () => {
-//     // First fetch roles from the database
-//     return new Promise((resolve, reject) => {
-//         db.query('SELECT * FROM role', (err, res) => {
-//             if (err) reject(err);
-//             // Convert the response to an array of role titles
-//             const roles = res.map(role => role.title);
-//             // Then prompt the user
-//     inquirer.prompt([
-//         {
-//             type: 'input',
-//             name: 'employee_id',
-//             message: 'What is the ID of the employee you would like to update?',
-//         },
-//         {
-//             type: 'list',
-//             name: 'employee_role_id',
-//             message: 'What is the new role of the employee you would like to update?',
-//             choices: roles,
-//         }
-//     ])
-//         .then((answer) => {
-//             const { employee_id, employee_role_id } = answer
+        // Get manager IDs and then filter the managers
+        const managerIds = managersResponseRows.map(({ manager_id }) => Number(manager_id));
+        const managers = employees.filter(employee => managerIds.includes(employee.id));
 
-//             db.query('UPDATE employee SET ? WHERE ?', [{ role_id: employee_role_id }, { id: employee_id }], (err, res) => {
-//                 if (err) throw err;
-//                 console.log('Employee updated!');
+        // Map to get employee and manager names
+        const employeeNames = employees.map(employee => employee.full_name);
+        // Include department name and role in manager's choice
+        const managerNames = managers.map(manager => `${manager.full_name} (${manager.department_name}: ${manager.role_name})`);
 
-//             })
-//         })
-// }
+        console.log("Employee Names:", employeeNames);
+        console.log("Manager Names:", managerNames);
 
-const updateEmployeeManager = () => {
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'employee_id',
-            message: 'What is the ID of the employee you would like to update?',
-        },
-        {
-            type: 'input',
-            name: 'employee_manager_id',
-            message: 'What is the new manager ID of the employee you would like to update?',
-        }
-    ])
-        .then((answer) => {
-            const { employee_id, employee_manager_id } = answer
+        // Prompt user for employee and manager to update
+        const answers = await inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employee_name',
+                message: 'Which employee would you like to update?',
+                choices: employeeNames,
+            },
+            {
+                type: 'list',
+                name: 'new_manager_name',
+                message: 'Who is the new manager for this employee?',
+                choices: managerNames,
+            },
+        ]);
 
-            db.query('UPDATE employee SET ? WHERE ?', [{ manager_id: employee_manager_id }, { id: employee_id }], (err, res) => {
-                if (err) throw err;
-                console.log('Employee updated!');
+        // Destructure response to get employee and manager names
+        const { employee_name, new_manager_name } = answers;
 
-            })
-        })
-}
+        // Extract name from manager choice
+        const manager_name = new_manager_name.split(" (")[0];
+
+        // Find the IDs of the selected employee and manager
+        const selectedEmployee = employees.find(employee => employee.full_name === employee_name);
+        const selectedManager = managers.find(manager => manager.full_name === manager_name);
+
+        console.log("Selected Employee:", selectedEmployee);
+        console.log("Selected Manager:", selectedManager);
+
+        // Update the employee's manager in the database
+        await db.query('UPDATE employee SET ? WHERE ?', [{ manager_id: selectedManager.id }, { id: selectedEmployee.id }]);
+        console.log('Employee updated!');
+
+    } catch (error) {
+        console.error(`Failed to update employee: ${error}`);
+    }
+};
+
 
 const deleteDepartment = async () => {
     const db = await getConnection();
@@ -506,7 +556,7 @@ module.exports = {
     addDepartment,
     addRole,
     addEmployee,
-    //updateEmployeeRole,
+    updateEmployeeRole,
     updateEmployeeManager,
     deleteDepartment,
     deleteRole,

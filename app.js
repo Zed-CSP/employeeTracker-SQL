@@ -50,7 +50,8 @@ const init = async() => {
                 await actions.updateEmployeeRole().then(refresh);
                 break;
             case 'Update an Employee Manager':
-                await actions.updateEmployeeManager().then(refresh);
+                await actions.updateEmployeeManager()//.then(refresh)
+                ;
                 break;
             case 'Delete a Department':
                 await actions.deleteDepartment().then(refresh);
