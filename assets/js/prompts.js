@@ -3,9 +3,9 @@ const mainPrompt = {
     name: 'action',
     message: 'Main Menu:',
     choices: [
-        'List all Departments',
-        'List all Roles',
-        'List all Employees',
+        'View all Departments',
+        'View all Roles',
+        'View all Employees',
         'View Department Budgets',
         'Add a Department',
         'Add a Role',

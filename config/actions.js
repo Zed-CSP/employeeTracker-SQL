@@ -39,19 +39,20 @@ const getDepartments = async () => {
     }
 };
 
-
 // User actions
 
 const viewAllDepartments = async () => {
     console.log('Viewing all departments...\n');
-    const db = await getConnection(); // ensure the connection promise is resolved
+    const db = await getConnection();
     try {
-        const [res] = await db.query('SELECT * FROM department'); // db.query returns a promise, so we use await
+        const [res] = await db.query('SELECT id, name AS department_name FROM department');
+        console.table(res);
         return res;
-    } catch(err) {
+    } catch (err) {
         console.error(`Error querying the database: ${err}`);
     }
 };
+
 
 const viewAllRoles = async () => {
     console.log('Viewing all roles...\n');
@@ -68,12 +69,27 @@ const viewAllEmployees = async () => {
     console.log('Viewing all employees...\n');
     const db = await getConnection();
     try {
-        const [res] = await db.query('SELECT * FROM employee');
+        const [res] = await db.query(`
+            SELECT 
+                employee.id,
+                employee.first_name,
+                employee.last_name,
+                role.title AS job_title,
+                department.name AS department,
+                role.salary,
+                CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+            FROM employee
+            JOIN role ON employee.role_id = role.id
+            JOIN department ON role.department_id = department.id
+            LEFT JOIN employee AS manager ON employee.manager_id = manager.id
+        `);
+        console.table(res);
         return res;
-    } catch(err) {
+    } catch (err) {
         console.error(`Error querying the database: ${err}`);
     }
 };
+
 
 const addDepartment = async () => {
     console.log('Adding a department...\n');
@@ -300,7 +316,6 @@ const updateEmployeeRole = async () => {
     }
 };
 
-
 const updateEmployeeManager = async () => {
     try {
         const db = await getConnection();
@@ -361,9 +376,6 @@ const updateEmployeeManager = async () => {
     }
 };
 
-
-
-
 const deleteDepartment = async () => {
     const db = await getConnection();
 
@@ -391,8 +403,7 @@ const deleteDepartment = async () => {
     } catch (err) {
         console.error(`Error deleting the department: ${err}`);
     }
-}
-
+};
 
 const deleteRole = async () => {
     try {
@@ -459,24 +470,51 @@ const deleteEmployee = async () => {
     }
 };
 
-const viewDepartmentBudget = () => {
-    inquirer.prompt(
+const viewDepartmentBudget = async () => {
+    try {
+      console.log('Viewing Department Budgets...\n');
+  
+      // Fetch departments from the database
+      const db = await getConnection();
+      const [departments] = await db.query('SELECT * FROM department');
+  
+      // Prompt user to select a department
+      const departmentChoices = departments.map(department => department.name);
+      const { departmentName } = await inquirer.prompt([
         {
-            type: 'input',
-            name: 'department_id',
-            message: 'What is the ID of the department you would like to view the budget for?',
-        }
-    )
-        .then((answer) => {
-            const { department_id } = answer
-
-            db.query('SELECT SUM(salary) AS budget FROM role WHERE department_id = ?', [department_id], (err, res) => {
-                if (err) throw err;
-                console.table(res);
-
-            })
-        })
-}
+          type: 'list',
+          name: 'departmentName',
+          message: 'Select a department:',
+          choices: departmentChoices,
+        },
+      ]);
+  
+      // Fetch employees and their salaries for the selected department
+      const [employees] = await db.query(`
+        SELECT employee.id, employee.first_name, employee.last_name, role.salary
+        FROM employee
+        INNER JOIN role ON employee.role_id = role.id
+        INNER JOIN department ON role.department_id = department.id
+        WHERE department.name = ?
+      `, [departmentName]);
+  
+      const formattedData = employees.map(employee => ({
+        id: employee.id,
+        firstname: employee.first_name,
+        lastname: employee.last_name,
+        salary: employee.salary,
+      }));
+  
+      // Calculate the department's budget total
+      const departmentBudget = employees.reduce((total, employee) => total + employee.salary, 0);
+  
+      // Return the formatted data and department budget total
+      return { formattedData, departmentBudget };
+    } catch (error) {
+      console.error(`Failed to view department budgets: ${error}`);
+    }
+  };
+  
 
 // const viewEmployeesByManager = () => {
 //     inquirer.prompt(

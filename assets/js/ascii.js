@@ -4,17 +4,19 @@ const { forEach } = require('lodash');
 const line = '__________________________________________________________________________________________________________________________________________';
 const line2 = '******************************************************************************************************************************************';
 const space = '\n';
+const tag = 'SQL Employee Database Management System CLI. Christopher Peret (c) 2023.';
 
 const title = figlet.textSync('Employee Tracker.', { font: 'Larry 3D' });
 
 const art = [
-  space,
+  space.repeat(8),
   line,
   line2,
   title,
   line2,
   line,
-  space.repeat(8),
+  tag,
+  space.repeat(2),
 ];
 
 function titleArt() {

@@ -9,14 +9,22 @@ const mainPrompt = require('./assets/js/prompts.js');
  
 
 
-const refresh = (res) => {
+
+const refresh = async (res) => {
     console.clear();
     titleArt();
     console.log('connected as id ' + connection.threadId);
-    if(res) display(res);
-    else console.log('\n');
+    if (res && res.formattedData) {
+      display(res.formattedData);
+      const departmentBudget = parseFloat(res.departmentBudget);
+      console.log(`\nDepartment Budget Total: $${departmentBudget.toFixed(2)}\n`);
+    } else if (res) {
+        display(res);
+    } else {
+      console.log('\n');
+    }
     init();
-}
+};
 
 // function which prompts the user for what action they should take
 const init = async() => {
@@ -24,13 +32,13 @@ const init = async() => {
         const { action } = await inquirer.prompt([mainPrompt]);
         
         switch (action) {
-            case 'List all Departments':
+            case 'View all Departments':
                 await actions.viewAllDepartments().then(refresh);
                 break;
-            case 'List all Roles':
+            case 'View all Roles':
                 await actions.viewAllRoles().then(refresh);
                 break;
-            case 'List all Employees':
+            case 'View all Employees':
                 await actions.viewAllEmployees().then(refresh);
                 break;
             case 'View Department Budgets':
@@ -43,15 +51,13 @@ const init = async() => {
                 await actions.addRole().then(refresh);
                 break;
             case 'Add an Employee':
-                await actions.addEmployee()//.then(refresh)
-                ;
+                await actions.addEmployee().then(refresh);
                 break;
             case 'Update an Employee Role':
                 await actions.updateEmployeeRole().then(refresh);
                 break;
             case 'Update an Employee Manager':
-                await actions.updateEmployeeManager()//.then(refresh)
-                ;
+                await actions.updateEmployeeManager().then(refresh);
                 break;
             case 'Delete a Department':
                 await actions.deleteDepartment().then(refresh);
@@ -68,8 +74,6 @@ const init = async() => {
         };
     }, 250); // Delay of aggressive inquirer prompt
 };
-
-
 
 function display(results) {
     console.table(results);
