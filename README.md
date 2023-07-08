@@ -19,15 +19,13 @@
 2. Navigate to your cloned directory and Install node packages: [node.js v18.12.1](https://nodejs.org/en) 
 3. Open the root directory in your terminal
 4. Type `npm i` in the command line to install `node_modules` and required dependencies
-5. Create a .env file in the root directory with these parameters: 
-    `
+5. Create a .env file in the root directory with these parameters: `
     DB_HOST = localhost
     DB_USER = root
     DB_PASSWORD = <your mysql password>
     PORT = 3006
     SECRET = <Your SECRET>
-    DB_NAME='employee_db'
-    `
+    DB_NAME='employee_db'`
 6. Open MySQL Shell in your CLI using the command: 'mysql -u <your username> -p' 
 7. Enter your MYSQL2 <password>
 8. Create and select the database by entering the command: `source db/schemas.sql;` and then seed your database using the command:`source db/seeds.sql`
