@@ -349,24 +349,37 @@ const deleteDepartment = async () => {
 }
 
 
-const deleteRole = () => {
-    inquirer.prompt(
-        {
-            type: 'input',
+const deleteRole = async () => {
+    try {
+        // Get a connection to the database
+        const db = await getConnection();
+
+        // Query the database for all roles
+        const roles = await db.query('SELECT id, title FROM role');
+
+        // Convert the roles into a format that can be used with Inquirer
+        const roleChoices = roles[0].map(role => ({name: role.title, value: role.id}));
+
+        // Prompt the user to choose a role to delete
+        const answer = await inquirer.prompt({
+            type: 'list',
             name: 'role_id',
-            message: 'What is the ID of the role you would like to delete?',
-        }
-    )
-        .then((answer) => {
-            const { role_id } = answer
+            message: 'Which role would you like to delete?',
+            choices: roleChoices,
+        });
 
-            db.query('DELETE FROM role WHERE ?', { id: role_id }, (err, res) => {
-                if (err) throw err;
-                console.log('Role deleted!');
+        // Destructure the role_id from the answer
+        const { role_id } = answer;
 
-            })
-        })
-}
+        // Execute the delete query
+        await db.query('DELETE FROM role WHERE ?', { id: role_id });
+
+        console.log('Role deleted!');
+    } catch (error) {
+        console.error(`Failed to delete role: ${error}`);
+    }
+};
+
 
 const deleteEmployee = () => {
     inquirer.prompt(
