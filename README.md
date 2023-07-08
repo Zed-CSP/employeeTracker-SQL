@@ -32,7 +32,7 @@ This Is a Simple CLI propgram that allows the user to CRUD a SQL Employee Databa
 10. Run the application by typing `npm start` in the command line.
   
 ## Usage
-This Is a Simple CLI propgram that allows the user to CRUD a SQL Employee Database.  The user will see a splash screen and be prompted through database view options and user actions. The actions should account for nuances of user data needed for the task at hand. Enjoy the 90's television easteregg in the seeded data! Inorder to get the 'aggressive' nature of the nested inquirer prompts to await the user play well I had to employ alot of 'promises' and upgrade to the MYSQL2/promises package
+This Is a Simple CLI propgram that allows the user to CRUD an SQL Employee Database.  The user will see a splash screen and be prompted through database view options and user actions. The actions should account for nuances of user data needed for the task at hand. Enjoy the 90's television easteregg in the seeded data! Inorder to get the 'aggressive' nature of the nested inquirer prompts to await the user play well I had to employ alot of 'promises' and upgrade to the MYSQL2/promises package
 
 ## Demo
 
