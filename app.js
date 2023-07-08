@@ -9,21 +9,21 @@ const mainPrompt = require('./assets/js/prompts.js');
 const refresh = async (res) => {
     console.clear();
     titleArt();
-    if (res && res.formattedData) {
+    if (res && res.formattedData) { //edge case where budget also needs displaying
       display(res.formattedData);
       const departmentBudget = parseFloat(res.departmentBudget);
       console.log(`\nDepartment Budget Total: $${departmentBudget.toFixed(2)}\n`);
-    } else if (res) {
+    } else if (res) { // standard display
         display(res);
     } else {
-      console.log('\n');
+      console.log('\n'); // nothing to display 
     }
     main();
 };
 
 // function which prompts the user for what action they should take
 const main = async() => {
-    setTimeout(async() => {
+    setTimeout(async() => { // timer allows art to generate before agressive Inquirer prompt
         const { action } = await inquirer.prompt([mainPrompt]);
         
         switch (action) {
@@ -74,10 +74,12 @@ const main = async() => {
     }, 250); // Delay of aggressive inquirer prompt
 };
 
+// clear screen?
 function clear() {
-    console.log('\n');
+//    console.log('\n');
 };
 
+// display the table
 function display(results) {
     console.table(results);
 };
