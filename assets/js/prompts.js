@@ -7,7 +7,7 @@ const mainPrompt = {
         'View all Roles',
         'View all Employees',
         'View Department Budgets',
-        'View Employees by Manager',
+        //'View Employees by Manager',
         'Add a Department',
         'Add a Role',
         'Add an Employee',

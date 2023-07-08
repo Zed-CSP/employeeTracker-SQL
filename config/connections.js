@@ -12,7 +12,7 @@ const db = async () => {
             port: 3306
         });
 
-        console.log('Connected to the employee_db database.');
+        //console.log('Connected to the employee_db database.');
         return connection;
     } catch (err) {
         console.error(`Unable to connect to the database: ${err}`);
