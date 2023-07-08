@@ -27,8 +27,8 @@
     PORT = 3006
     SECRET = <Your SECRET>
     DB_NAME='employee_db'`
-6. Open MySQL Shell in your CLI using the command: 'mysql -u <your username> -p' 
-7. Enter your MYSQL2 <password>
+6. Open MySQL Shell in your CLI using the command: 'mysql -u `root` -p' 
+7. Enter your MYSQL2 `<password>`
 8. Create and select the database by entering the command: `source db/schemas.sql;` and then seed your database using the command:`source db/seeds.sql`
 9. Close MySQL Shell using the command: 'exit'
 10. Run the application by typing `npm start` in the command line.
