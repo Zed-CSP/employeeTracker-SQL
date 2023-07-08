@@ -32,8 +32,8 @@
         SECRET = <Your SECRET>
         DB_NAME='employee_db'
         ```
-    6. Open MySQL Shell using the command: 'mysql -u <your username> -p' 
-    7. Enter <your password>
+    6. Open MySQL Shell in your CLI using the command: 'mysql -u <your username> -p' 
+    7. Enter your MYSQL2 <password>
     8. Create and select the database by entering the command: 
         ```
         'source db/schemas.sql;' 
