@@ -9,7 +9,6 @@ This Is a Simple CLI propgram that allows the user to CRUD a SQL Employee Databa
   * [Installation](#installation)
   * [Usage](#usage)
   * [Demo](#demo)
-  * [Tests](#tests)
   * [License](#license)
   * [Questions](#questions)
   
@@ -48,4 +47,4 @@ View a video walkthrough of the app [here](https://github.com/Zed-CSP/employeeTr
 This project is licensed under the MIT License - see Badge link for details.
   
 ## Questions
-If you have any questions or issues with the repo, please reach out to "[Zed-CSP]("https://github.com/Zed-CSP")" or create an issue in the "["repo"]()".
+If you have any questions or issues with the repo, please reach out to "[Zed-CSP]("https://github.com/Zed-CSP")" or create an issue in the "[repo](https://github.com/Zed-CSP/employeeTracker-SQL)".
