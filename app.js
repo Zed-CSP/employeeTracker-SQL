@@ -2,7 +2,9 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2/promise');
 const connection = require('./config/connections.js');
 const actions = require('./config/actions.js');
-const titleArt = require('./assets/ascii.js');
+const titleArt = require('./assets/js/ascii.js');
+const prompts = require('./assets/js/prompts.js');
+const mainPrompt = require('./assets/js/prompts.js');
 
  
 
@@ -19,26 +21,7 @@ const refresh = (res) => {
 // function which prompts the user for what action they should take
 const init = async() => {
     setTimeout(async() => {
-        const { action } = await inquirer.prompt([{
-            type: 'list',
-            name: 'action',
-            message: 'Main Menu:',
-            choices: [
-                'List all Departments',
-                'List all Roles',
-                'List all Employees',
-                'View Department Budgets',
-                'Add a Department',
-                'Add a Role',
-                'Add an Employee',
-                'Update an Employee Role',
-                'Update an Employee Manager',
-                'Delete a Department',
-                'Delete a Role',
-                'Delete an Employee',
-                'Exit',
-            ],
-        }]);
+        const { action } = await inquirer.prompt([mainPrompt]);
         
         switch (action) {
             case 'List all Departments':

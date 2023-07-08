@@ -1,10 +1,12 @@
 const db = require('./connections.js')
 const init = require('../app.js')
 const inquirer = require('inquirer');
+const addRolePrompt = require('../assets/js/prompts.js');
 
 // getters
 
 const getConnection = require('./connections.js');
+const { get } = require('express/lib/response.js');
 
 
 const getManagers = async () => {
@@ -236,7 +238,7 @@ const addEmployee = async () => {
                     type: 'list',
                     name: 'employee_manager_name',
                     message: 'Who is the manager of this employee?',
-                    choices: managers,
+                    choices: getManagersSafe(),
                 }
             ]);
     
