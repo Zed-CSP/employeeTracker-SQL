@@ -515,27 +515,32 @@ const viewDepartmentBudget = async () => {
       console.error(`Failed to view department budgets: ${error}`);
     }
 };
-  
-  
 
-// const viewEmployeesByManager = () => {
-//     inquirer.prompt(
-//         {
-//             type: 'input',
-//             name: 'manager_id',
-//             message: 'What is the ID of the manager you would like to view employees for?',
-//         }
-//     )
-//     .then ((answer) => {
-//         const { manager_id } = answer
-
-//         db.query('SELECT * FROM employee WHERE manager_id = ?', [manager_id], (err, res) => {
-//             if (err) throw err;
-//             console.table(res);
-//    
-//         })
-//     })
-// }
+// const viewEmployeesByManager = async (db) => {
+//     try {
+//         // Fetch the list of current managers from the database
+//         const [managers] = await db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employee WHERE is_manager = 1');
+  
+//         // Prompt the user to select a manager from the list
+//         const { managerName } = await inquirer.prompt({
+//             type: 'list',
+//             name: 'managerName',
+//             message: 'Select a manager:',
+//             choices: managers.map((manager) => manager.full_name),
+//         });
+  
+//         // Find the manager's ID based on the selected name
+//         const selectedManager = managers.find((manager) => manager.full_name === managerName);
+  
+//         // Fetch employees for the selected manager from the database
+//         const [employees] = await db.query('SELECT * FROM employee WHERE manager_id = ?', [selectedManager.id]);
+  
+//         console.table(employees);
+//         return employees; // Return the employees for further processing if needed
+//     } catch (error) {
+//       console.error(`Failed to view employees by manager: ${error}`);
+//     }
+// };
 
 module.exports = {
 
@@ -553,6 +558,4 @@ module.exports = {
     viewDepartmentBudget,
     // viewEmployeesByManager,
     // viewEmployeesByDepartment,
-    // viewDepartmentUtilization,
-    // viewDepartmentUtilizationByDepartment
 }

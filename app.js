@@ -39,6 +39,10 @@ const main = async() => {
             case 'View Department Budgets':
                 await actions.viewDepartmentBudget().then(refresh);
                 break;
+            case 'View Employees by Manager':
+                await actions.viewEmployeesByManager()//.then(refresh)
+                ;
+                break;
             case 'Add a Department':
                 await actions.addDepartment().then(refresh);
                 break;
