@@ -380,25 +380,39 @@ const deleteRole = async () => {
     }
 };
 
+const deleteEmployee = async () => {
+    try {
+        console.log('Deleting an employee...\n');
+        const db = await getConnection();
 
-const deleteEmployee = () => {
-    inquirer.prompt(
-        {
-            type: 'input',
-            name: 'employee_id',
-            message: 'What is the ID of the employee you would like to delete?',
-        }
-    )
-        .then((answer) => {
-            const { employee_id } = answer
+        // Fetch employees from the database
+        const [employeesResponse] = await db.query('SELECT id, first_name, last_name FROM employee');
 
-            db.query('DELETE FROM employee WHERE ?', { id: employee_id }, (err, res) => {
-                if (err) throw err;
-                console.log('Employee deleted!');
+        // Convert the responses to an array of choices
+        const employeeChoices = employeesResponse.map(employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id }));
 
-            })
-        })
-}
+        // Then prompt the user
+        const answer = await inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employee_id',
+                message: 'Which employee would you like to delete?',
+                choices: employeeChoices,
+            },
+        ]);
+
+        const { employee_id } = answer;
+
+        // Delete the selected employee
+        await db.query('DELETE FROM employee WHERE ?', { id: employee_id });
+
+        console.log('Employee deleted!');
+        return true;
+    } catch (error) {
+        console.error(`Failed to delete employee: ${error}`);
+        return false;
+    }
+};
 
 const viewDepartmentBudget = () => {
     inquirer.prompt(
