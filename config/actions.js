@@ -1,5 +1,5 @@
 const db = require('./connections.js')
-const init = require('../app.js')
+const main = require('../app.js')
 const inquirer = require('inquirer');
 const addRolePrompt = require('../assets/js/prompts.js');
 
@@ -7,7 +7,6 @@ const addRolePrompt = require('../assets/js/prompts.js');
 
 const getConnection = require('./connections.js');
 const { get } = require('express/lib/response.js');
-
 
 const getManagers = async () => {
     try {
@@ -53,7 +52,6 @@ const viewAllDepartments = async () => {
     }
 };
 
-
 const viewAllRoles = async () => {
     console.log('Viewing all roles...\n');
     try {
@@ -69,8 +67,8 @@ const viewAllEmployees = async () => {
     console.log('Viewing all employees...\n');
     const db = await getConnection();
     try {
-        const [res] = await db.query(`
-            SELECT 
+        const [res] = await db.query(
+            `SELECT 
                 employee.id,
                 employee.first_name,
                 employee.last_name,
@@ -78,18 +76,18 @@ const viewAllEmployees = async () => {
                 department.name AS department,
                 role.salary,
                 CONCAT(manager.first_name, ' ', manager.last_name) AS manager
-            FROM employee
-            JOIN role ON employee.role_id = role.id
-            JOIN department ON role.department_id = department.id
-            LEFT JOIN employee AS manager ON employee.manager_id = manager.id
-        `);
+                FROM employee
+                JOIN role ON employee.role_id = role.id
+                JOIN department ON role.department_id = department.id
+                LEFT JOIN employee AS manager ON employee.manager_id = manager.id
+                `
+            );
         console.table(res);
         return res;
     } catch (err) {
         console.error(`Error querying the database: ${err}`);
     }
 };
-
 
 const addDepartment = async () => {
     console.log('Adding a department...\n');
@@ -310,7 +308,7 @@ const updateEmployeeRole = async () => {
 
         console.log('Employee updated!');
         return true;
-    } catch (error) {
+        } catch (error) {
         console.error(`Failed to update employee: ${error}`);
         return false;
     }
@@ -472,48 +470,52 @@ const deleteEmployee = async () => {
 
 const viewDepartmentBudget = async () => {
     try {
-      console.log('Viewing Department Budgets...\n');
+        console.log('Viewing Department Budgets...\n');
   
-      // Fetch departments from the database
-      const db = await getConnection();
-      const [departments] = await db.query('SELECT * FROM department');
+        // Fetch departments from the database
+        const db = await getConnection();
+        const [departments] = await db.query('SELECT * FROM department');
   
-      // Prompt user to select a department
-      const departmentChoices = departments.map(department => department.name);
-      const { departmentName } = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'departmentName',
-          message: 'Select a department:',
-          choices: departmentChoices,
-        },
-      ]);
+        // Prompt user to select a department
+        const departmentChoices = departments.map(department => department.name);
+        const { departmentName } = await inquirer.prompt([
+            {
+                type: 'list',
+                name: 'departmentName',
+                message: 'Select a department:',
+                choices: departmentChoices,
+            },
+        ]);
   
-      // Fetch employees and their salaries for the selected department
-      const [employees] = await db.query(`
-        SELECT employee.id, employee.first_name, employee.last_name, role.salary
-        FROM employee
-        INNER JOIN role ON employee.role_id = role.id
-        INNER JOIN department ON role.department_id = department.id
-        WHERE department.name = ?
-      `, [departmentName]);
+        // Fetch employees and their salaries for the selected department
+        const [employees] = await db.query(
+            `
+            SELECT employee.id, employee.first_name, employee.last_name, role.salary
+            FROM employee
+            INNER JOIN role ON employee.role_id = role.id
+            INNER JOIN department ON role.department_id = department.id
+            WHERE department.name = ?
+            `, 
+            [departmentName]);
   
-      const formattedData = employees.map(employee => ({
-        id: employee.id,
-        firstname: employee.first_name,
-        lastname: employee.last_name,
-        salary: employee.salary,
-      }));
+        // Calculate the department's budget total
+        const departmentBudget = employees.reduce((total, employee) => total + parseFloat(employee.salary), 0);
   
-      // Calculate the department's budget total
-      const departmentBudget = employees.reduce((total, employee) => total + employee.salary, 0);
+        // Prepare the data for display
+        const formattedData = employees.map(employee => ({
+            id: employee.id,
+            first_name: employee.first_name,
+            last_name: employee.last_name,
+            salary: employee.salary,
+        }));
   
-      // Return the formatted data and department budget total
+      // Return the data along with the department budget total
       return { formattedData, departmentBudget };
     } catch (error) {
       console.error(`Failed to view department budgets: ${error}`);
     }
-  };
+};
+  
   
 
 // const viewEmployeesByManager = () => {
@@ -531,52 +533,6 @@ const viewDepartmentBudget = async () => {
 //             if (err) throw err;
 //             console.table(res);
 //    
-//         })
-//     })
-// }
-
-// const viewEmployeesByDepartment = () => {
-//     inquirer.prompt(
-//         {
-//             type: 'input',
-//             name: 'department_id',
-//             message: 'What is the ID of the department you would like to view employees for?',
-//         }
-//     )
-//     .then ((answer) => {
-//         const { department_id } = answer
-
-//         db.query('SELECT * FROM employee INNER JOIN role ON employee.role_id = role.id WHERE role.department_id = ?', [department_id], (err, res) => {
-//             if (err) throw err;
-//             console.table(res);
-//    
-//         })
-//     })
-// }
-
-// const viewDepartmentUtilization = () => {
-//     db.query('SELECT department.name AS department, SUM(role.salary) AS budget, COUNT(employee.id) AS headcount FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id GROUP BY department.name', (err, res) => {
-//         if (err) throw err;
-//         console.table(res);
-//
-//     })
-// }
-
-// const viewDepartmentUtilizationByDepartment = () => {
-//     inquirer.prompt(
-//         {
-//             type: 'input',
-//             name: 'department_id',
-//             message: 'What is the ID of the department you would like to view utilization for?',
-//         }
-//     )
-//     .then ((answer) => {
-//         const { department_id } = answer
-
-//         db.query('SELECT department.name AS department, SUM(role.salary) AS budget, COUNT(employee.id) AS headcount FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE department.id = ? GROUP BY department.name', [department_id], (err, res) => {
-//             if (err) throw err;
-//             console.table(res);
-//             init();
 //         })
 //     })
 // }

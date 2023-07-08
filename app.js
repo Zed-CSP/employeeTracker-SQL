@@ -6,14 +6,9 @@ const titleArt = require('./assets/js/ascii.js');
 const prompts = require('./assets/js/prompts.js');
 const mainPrompt = require('./assets/js/prompts.js');
 
- 
-
-
-
 const refresh = async (res) => {
     console.clear();
     titleArt();
-    console.log('connected as id ' + connection.threadId);
     if (res && res.formattedData) {
       display(res.formattedData);
       const departmentBudget = parseFloat(res.departmentBudget);
@@ -23,11 +18,11 @@ const refresh = async (res) => {
     } else {
       console.log('\n');
     }
-    init();
+    main();
 };
 
 // function which prompts the user for what action they should take
-const init = async() => {
+const main = async() => {
     setTimeout(async() => {
         const { action } = await inquirer.prompt([mainPrompt]);
         
@@ -75,6 +70,10 @@ const init = async() => {
     }, 250); // Delay of aggressive inquirer prompt
 };
 
+function clear() {
+    console.log('\n');
+};
+
 function display(results) {
     console.table(results);
 };
@@ -85,7 +84,8 @@ const exit = () => {
     process.exit();
 };
 
+clear();
 titleArt();
-init();
+main();
 
-module.exports = init;
+module.exports = main;
